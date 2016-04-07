@@ -7,7 +7,6 @@ var Test = {};  // namespace
 
     //////////// Selection ////////////
     var Selector = function(selector) {
-        if (selector) console.log('creating selector with ' + selector);
     };
 
     // tl;dr selectors: '.CLASS_NAME', '#id', or '[attribute]'
@@ -34,9 +33,9 @@ var Test = {};  // namespace
             }.bind(this), []);
     };
 
+    // Select using .CLASS_NAME (like '.IDE_Morph')
     var ClassSelector = function(selector) {
         this._class = selector.slice(1);
-        console.log('selecting class:', this._class);
     };
     
     ClassSelector.prototype = new Selector();

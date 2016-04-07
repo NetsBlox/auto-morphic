@@ -1,5 +1,6 @@
 var getId = require('./utils').getId,
-    utils = require('./morphic-test-utils');
+    utils = require('./morphic-test-utils'),
+    Page = require('./page');
 
 var Selection = function(parent, selector) {
     var Should = require('./should');  // nested to avoid circular deps
@@ -17,20 +18,7 @@ var Selection = function(parent, selector) {
     this.should = new Should(this);
 };
 
-Selection.prototype = {};
-
-// Retrieve the page from the current window
-Selection.prototype.page = function() {
-    return this.root()._page;
-};
-
-Selection.prototype.root = function() {
-    var node = this;
-    while (node._parent !== null) {
-        node = node._parent;
-    }
-    return node;
-};
+Selection.prototype = new Page();
 
 Selection.prototype.toString = function() {
     return '["' + this._selector + '"]';
@@ -60,7 +48,6 @@ Selection.prototype._select = function(selector) {
 Selection.prototype._equals = function(value) {
     this.promise = this.promise
         .then(() => {
-                console.log('evaluating in _equals');
             return this.page().evaluate(utils.allEqual(this._id, value));
         });
 
@@ -72,8 +59,12 @@ Selection.prototype.find = function(selector) {
     return new Selection(this, selector);
 };
 
-Selection.prototype.click = function(selector) {
-    // TODO
+Selection.prototype.click = function() {
+    this.promise = this.promise
+        .then(() => {
+            return this.page().evaluate(utils.click(this._id));
+        });
+
     return this;
 };
 

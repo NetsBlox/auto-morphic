@@ -19,14 +19,13 @@ var allEqual = function(id, value) {
         }, true);
 };
 
-var setToVar = function(id, value) {
-    Test.MEMORY[id] = window[value];
-    return id;
-};
-
 var retrieve = function(id) {
     console.log('retrieving from ' + id);
     return Test.MEMORY[id];
+};
+
+var length = function(id) {
+    return Test.MEMORY[id].length;
 };
 
 var selectWorlds = function(id) {
@@ -45,6 +44,20 @@ var selectWorlds = function(id) {
     return id;
 };
 
+// Interaction
+var click = function(id) {
+    var item,
+        pos;
+
+    for (var i = Test.MEMORY[id].length; i--;) {
+        item = Test.MEMORY[id][i];
+        pos = item.bounds.center();
+        item.mouseClickLeft(pos);
+    }
+    
+    return true;
+};
+
 // debugging
 var addresses = function() {
     return Object.keys(Test.MEMORY);
@@ -57,12 +70,12 @@ var hello = function() {
 var utils = {
     select: select,
     retrieve: retrieve,
+    length: length,
     selectWorlds: selectWorlds,
     equal: equal,
     allEqual: allEqual,
     hello: hello,
-    addresses: addresses,
-    setToVar: setToVar
+    addresses: addresses
 };
 
 // Now some weird things happen to allow passing args btwn contexts...
