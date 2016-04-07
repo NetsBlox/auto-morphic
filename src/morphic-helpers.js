@@ -68,7 +68,7 @@ var Test = {};  // namespace
     };
     
     AttributeSelector.prototype = new Selector();
-    AttributeSelector.regex = /\[([a-zA-Z_]{1}[a-zA-Z0-9_]*)(=("[a-zA-Z_]{1}[a-zA-Z0-9_]*"|[0-9]+|(true|false)))?\]/;
+    AttributeSelector.regex = /\[([a-zA-Z_]{1}[a-zA-Z0-9_]*)(=("[a-zA-Z_]{1}[a-zA-Z0-9_\s\.]*"|[0-9]+|(true|false)))?\]/;
 
     AttributeSelector.prototype._matches = function(node) {
         return this._hasValue ? node[this._attr] === this._value : node.hasOwnProperty(this._attr);

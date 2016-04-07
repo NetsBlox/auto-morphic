@@ -40,6 +40,20 @@ describe('selection', function() {
                     .end()
                 .end(done)
         });
+
+        it('should find MenuItemMorph by labelString', function(done) {
+            client
+                .get(url)
+                // Get the controlBar
+                .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
+                    .click()
+                    .end()
+                .find('.MenuMorph.MenuItemMorph[labelString="Login..."]')  // Login...
+                    .should.have.length(1)
+                    .end()
+                .end(done)
+        });
+
     });
 
     describe('"should"', function() {
