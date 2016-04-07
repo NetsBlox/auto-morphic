@@ -115,7 +115,6 @@ var Test = {};  // namespace
         }
 
         // use the selectors in order on the root nodes
-        console.log('about to select');
         nodes = roots;
         for (var i = 0; i < selectors.length; i++) {
             nodes = selectors[i].select(nodes);

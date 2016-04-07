@@ -6,19 +6,22 @@ var Selection = function(parent, selector) {
     var Should = require('./should');  // nested to avoid circular deps
 
     this._parent = parent;
-    this.promise = parent.promise;
-    this.done = parent.done;
-
     this._id = getId();
 
     // I need a reference to the root node to search from
     this._selector = selector;
-    this._select(selector);
 
+    this.init();
     this.should = new Should(this);
 };
 
 Selection.prototype = new Page();
+
+Selection.prototype.init = function() {
+    this.promise = this._parent.promise;
+    this.done = this._parent.done;
+    this._select(this._selector);
+};
 
 Selection.prototype.toString = function() {
     return '["' + this._selector + '"]';
@@ -85,12 +88,15 @@ Selection.prototype.attr = function(name) {
 };
 
 Selection.prototype.end = function(fn) {
-    // Clear memory
-    // TODO
-
     if (fn) {
-        this.promise.then(fn);
+        this.promise = this.promise.then(fn);
     }
+
+    // Clear memory
+    this.promise = this.promise
+        .then(() => {
+            return this.page().evaluate(utils.delete(this._id));
+        });
 
     if (this._parent) {
         this._parent.promise = this.promise;

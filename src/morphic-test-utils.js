@@ -2,7 +2,7 @@
 
 var select = function(id, root, selector) {
     var selection = Test.Select(selector, Test.MEMORY[root] || []);
-    console.log('selecting ' + selector);
+    console.log('storing ' + selector + ' selection at ' + id);
     Test.MEMORY[id] = selection;
     return id;
 };
@@ -78,7 +78,11 @@ var utils = {
     equal: equal,
     allEqual: allEqual,
     hello: hello,
-    addresses: addresses
+    addresses: addresses,
+    delete: function(id) {
+        delete Test.MEMORY[id];
+    }
+
 };
 
 // Now some weird things happen to allow passing args btwn contexts...

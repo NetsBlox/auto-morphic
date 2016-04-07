@@ -56,6 +56,28 @@ describe('selection', function() {
 
     });
 
+    it('should clear memory on client on selection delete', function(done) {
+        var wSelection,
+            stageSelection,
+            id;
+
+        wSelection = client.get(url);
+        id = wSelection._id;
+
+        stageSelection = wSelection
+            .find('.NetsBloxMorph.StageMorph')
+            .inspect(res => assert(!!res));
+
+        wSelection._id = stageSelection._id;
+
+        // Terminate the stage selection
+        stageSelection
+            .end();
+
+        wSelection.inspect(res => assert(!res))
+            .end(done);
+    });
+
     describe('"should"', function() {
 
         it('should support basic "should" syntax', function(done) {

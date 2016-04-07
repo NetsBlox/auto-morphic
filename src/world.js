@@ -11,10 +11,8 @@ var phantom = require('phantom'),
 // TODO: Add logger
 
 var World = function(url, done) {
+    Selection.call(this, null, null);
     // using promises here so we can chain stuff
-    this._parent = null;
-    this._id = getId();
-
     this.done = nop;
     this.promise = phantom.create()
         .then(browser => {
@@ -50,11 +48,11 @@ var World = function(url, done) {
 
 World.prototype = extend({}, Selection.prototype);
 
-
 World.prototype.toString = function(fn) {
-    return '[ World ]';
+    return '[ WorldMorph ]';
 };
 
+// Overrides
 World.prototype.end = function(fn) {
     Selection.prototype.end.call(this);
     this.done = fn || nop;
@@ -63,6 +61,8 @@ World.prototype.end = function(fn) {
         this._browser.exit();
     });
 };
+
+World.prototype.init = nop;
 
 module.exports = {
     get: function(url, done) {
