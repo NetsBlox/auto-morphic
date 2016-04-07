@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/NetsBlox/auto-morphic.svg?branch=master)](https://travis-ci.org/NetsBlox/auto-morphic)
+[![Stories in Ready](https://badge.waffle.io/NetsBlox/auto-morphic.png?label=ready&title=Ready)](http://waffle.io/NetsBlox/auto-morphic)
 # auto-morphic
 Auto-morphic is a automated testing utility for [morphic.js](https://github.com/jmoenig/morphic.js).
 
@@ -7,7 +9,8 @@ As morphic does not use html elements (rather, it uses `Morph`s), existing frame
 A simple example of retrieving the `NetsBloxMorph`, the IDE in [netsblox](http://netsblox.org), is shown below:
 
 ```javascript
-var client = require('auto-morphic');
+var client = require('auto-morphic'),
+    assert = require('assert');
 
 client
     .get('http://netsblox.org')
