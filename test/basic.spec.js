@@ -21,9 +21,7 @@ describe('selection', function() {
             client
                 .get(url)
                 .find('.NetsBloxMorph')
-                    .inspect(ides => {
-                        assert.equal(ides.length, 1);
-                    })
+                    .should.not.be(null)
                     .end()
                 .end(done)
         });
