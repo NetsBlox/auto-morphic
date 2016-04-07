@@ -47,15 +47,17 @@ var selectWorlds = function(id) {
 // Interaction
 var click = function(id) {
     var item,
+        clicked = false,
         pos;
 
     for (var i = Test.MEMORY[id].length; i--;) {
         item = Test.MEMORY[id][i];
         pos = item.bounds.center();
         item.mouseClickLeft(pos);
+        clicked = true;
     }
     
-    return true;
+    return clicked;
 };
 
 // debugging
@@ -69,6 +71,7 @@ var hello = function() {
 
 var utils = {
     select: select,
+    click: click,
     retrieve: retrieve,
     length: length,
     selectWorlds: selectWorlds,

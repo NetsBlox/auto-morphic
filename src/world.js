@@ -58,8 +58,8 @@ World.prototype.toString = function(fn) {
 World.prototype.end = function(fn) {
     Selection.prototype.end.call(this);
     this.done = fn || nop;
-    return this.promise.then((err) => {
-        this.done(err);
+    return this.promise.then(() => {
+        this.done();
         this._browser.exit();
     });
 };

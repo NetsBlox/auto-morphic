@@ -63,18 +63,31 @@ describe('selection', function() {
         });
     });
 
-    // Clicking
-    it('should support clicking on elements', function(done) {
+    it('should find PushButtonMorph', function(done) {
         // Click on the project menu
         client
             .get(url)
-            .find('.NetsBloxMorph')
+            // Get the controlBar
+            .find('.NetsBloxMorph.PushButtonMorph')
                 .should.not.be(null)
                 .end()
             .end(done)
     });
 
-    // TODO
+    // Clicking
+    it('should support clicking on elements', function(done) {
+        // Click on the project menu
+        client
+            .get(url)
+            // Get the controlBar
+            .find('.NetsBloxMorph.PushButtonMorph[action="projectMenu"]')
+                .click()
+                .end()
+            .find('.MenuMorph')
+                .should.not.be(null)
+                .end()
+            .end(done)
+    });
 
     //it.skip('should log in successfully', function(done) {
         //client

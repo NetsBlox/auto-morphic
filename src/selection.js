@@ -63,7 +63,14 @@ Selection.prototype.click = function() {
     this.promise = this.promise
         .then(() => {
             return this.page().evaluate(utils.click(this._id));
-        });
+        })
+        .then(clicked => {
+            if (!clicked) {
+                var msg = `${this.toString()} is empty. Cannot click nothing.`;
+                console.error(msg);
+                throw Error(msg);
+            }
+        })
 
     return this;
 };
