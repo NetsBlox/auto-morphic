@@ -1,0 +1,110 @@
+// This should contain a bunch of methods to be serialized and run in phantomjs
+
+var select = function(id, root, selector) {
+    var selection = Test.Select(selector, Test.MEMORY[root] || []);
+    console.log('selecting ' + selector);
+    Test.MEMORY[id] = selection;
+    return id;
+};
+
+var equal = function(id, value) {
+    console.log('comparing ' + JSON.stringify(Test.MEMORY[id]) + ' to ' + value);
+    return Test.MEMORY[id] == value;
+};
+
+var allEqual = function(id, value) {
+    return Test.MEMORY[id].length && Test.MEMORY[id]
+        .reduce(function(prev, curr) {
+            return prev && curr == value;
+        }, true);
+};
+
+var setToVar = function(id, value) {
+    Test.MEMORY[id] = window[value];
+    return id;
+};
+
+var retrieve = function(id) {
+    console.log('retrieving from ' + id);
+    return Test.MEMORY[id];
+};
+
+var selectWorlds = function(id) {
+    var vars = Object.keys(window),
+        matches = [];
+
+    for (var i = vars.length; i--;) {
+        if (window[vars[i]] instanceof WorldMorph) {
+            matches.push(window[vars[i]]);
+        }
+    }
+
+    console.log('found ' + matches.length + ' world(s)');
+    console.log('storing world(s) at ' + id);
+    Test.MEMORY[id] = matches;
+    return id;
+};
+
+// debugging
+var addresses = function() {
+    return Object.keys(Test.MEMORY);
+};
+
+var hello = function() {
+    return 'hello';
+};
+
+var utils = {
+    select: select,
+    retrieve: retrieve,
+    selectWorlds: selectWorlds,
+    equal: equal,
+    allEqual: allEqual,
+    hello: hello,
+    addresses: addresses,
+    setToVar: setToVar
+};
+
+// Now some weird things happen to allow passing args btwn contexts...
+var createFn = function(fn, args) {
+    var defArgs,  // define arguments
+        newFn = fn;
+
+    if (args.length) {
+        defArgs = [];
+
+        for (var i = args.length; i--;) {
+            defArgs.push(args[i] + ' = ' + JSON.stringify(arguments[i+2]));
+        }
+
+        newFn = fn.replace('{', '{\n\tvar ' + defArgs.join(',\n\t\t') + ';\n')
+            .replace(/\t/g, '    ');  // tabs are 4 spaces (for debugging purposes)
+    }
+
+    return newFn;
+};
+
+// Convert the functions to templates
+var fn,
+    argRegex = /\(([\s]*[a-zA-Z_]{1}[a-zA-Z0-9_\s,]*)\)/,
+    matches,
+    args,
+    newFn;
+
+    // Add arrow fns with a single arg
+    // TODO
+
+for (var key in utils) {
+    fn = utils[key].toString();
+    matches = fn.match(argRegex);
+    newFn = fn.replace(argRegex, '()');
+    args = [];
+
+    if (matches) {
+        args = matches[1].replace(/\s*/g, '').split(',');
+    }
+
+    utils[key] = createFn.bind(null, newFn, args);
+}
+
+module.exports = utils;

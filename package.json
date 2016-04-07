@@ -1,0 +1,29 @@
+{
+  "name": "auto-morphic",
+  "version": "0.1.0",
+  "description": "An automated testing framework for morphic.js",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha --recursive test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NetsBlox/auto-morphic.git"
+  },
+  "author": "Brian Broll",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NetsBlox/auto-morphic/issues"
+  },
+  "homepage": "https://github.com/NetsBlox/auto-morphic#readme",
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  },
+  "dependencies": {
+    "object-concat": "^0.2.9",
+    "phantom": "^2.0.10"
+  }
+}
