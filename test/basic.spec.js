@@ -89,35 +89,4 @@ describe('selection', function() {
             .end(done)
     });
 
-    //it.skip('should log in successfully', function(done) {
-        //client
-            //.get('http://localhost:8000')
-            //.find('.WorldMorph.IDE_Morph.Morph#controlBar')
-                //.find('#projectMenu')
-                    //.click()
-                    //.end()
-                //.end()
-            //.getPopup()
-                //.find('#Login')
-                //.click()
-                //.end()
-            //.getPopup()
-                //.find('.InputFieldMorph')
-                //// Fill in the username and password
-                //// TODO
-                ////
-                //// Snap specific (DialogBoxMorph)
-                ////.fillIn('User name:', username)
-                ////.fillIn('Password:', password)
-                ////
-                ////.click('OK')
-                //.find('.PushButtonMorph[target="  OK  "]')
-                    //.click()
-                    //.end()
-                //.end()
-            //.getPopup()
-                //.assert.text('connected.')
-                //.end()
-            //.end(done)
-    //});
 });
