@@ -33,7 +33,6 @@ describe('selection', function() {
                 .get(url)
                 .find('.NetsBloxMorph.StageMorph')
                     .inspect(result => {
-                        console.log('returning...');
                         var stage = result[0];
                         assert.equal(result.length, 1);
                         try {

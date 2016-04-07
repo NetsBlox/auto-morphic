@@ -5,33 +5,12 @@ var phantom = require('phantom'),
     utils = require('./morphic-test-utils'),
     helpersPath = path.join(__dirname, 'morphic-helpers.js'),
     Selection = require('./selection'),
-    getId = require('./utils').getId;
+    getId = require('./utils').getId,
+    nop = () => {};
 
 // TODO: Add logger
 
-var nop = () => {};
-
-//var Attributes = function(parent, values) {
-    //this._values = values;
-    //this._parent = parent;
-//};
-
-//Attributes.prototype.equals = function(value) {
-    //if (this._values.length === 0) {
-        //throw Error('Expected ' + value + ' but found nothing...');
-    //}
-
-    //for (var i = this._values.length; i--;) {
-        //if (this._values[i] != value) {
-            //throw Error('Expected ' + value + ' but found ' + this._values[i]);
-        //}
-    //}
-    //return this._parent;  // implicitly 'end'
-//};
-
-//Attributes.prototype.end = Selection.prototype.end;
-
-var Window = function(url, done) {
+var World = function(url, done) {
     // using promises here so we can chain stuff
     this._parent = null;
     this._id = getId();
@@ -69,14 +48,14 @@ var Window = function(url, done) {
         });
 };
 
-Window.prototype = extend({}, Selection.prototype);
+World.prototype = extend({}, Selection.prototype);
 
 
-Window.prototype.toString = function(fn) {
-    return '[ Window ]';
+World.prototype.toString = function(fn) {
+    return '[ World ]';
 };
 
-Window.prototype.end = function(fn) {
+World.prototype.end = function(fn) {
     Selection.prototype.end.call(this);
     this.done = fn || nop;
     return this.promise.then((err) => {
@@ -87,6 +66,6 @@ Window.prototype.end = function(fn) {
 
 module.exports = {
     get: function(url, done) {
-        return new Window(url, done);
+        return new World(url, done);
     }
 };

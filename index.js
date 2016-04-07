@@ -1,1 +1,1 @@
-module.exports = require('./src/morphic-tester');
+module.exports = require('./src/world');
