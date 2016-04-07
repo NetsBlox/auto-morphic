@@ -28,19 +28,14 @@ describe('selection', function() {
                 .end(done)
         });
 
-        it.skip('should find using nested .CLASS_NAME\'s', function(done) {
+        it('should find using nested .CLASS_NAME\'s', function(done) {
             client
                 .get(url)
                 .find('.NetsBloxMorph.StageMorph')
                     .inspect(result => {
                         var stage = result[0];
                         assert.equal(result.length, 1);
-                        try {
-                            assert.equal(stage.constructor.name, 'StageMorph');
-                        } catch(e) {
-                            console.log('failed :(');
-                            assert(false, e);
-                        }
+                        assert.equal(stage.name, 'Stage');
                     })
                     .end()
                 .end(done)
