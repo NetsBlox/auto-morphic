@@ -1,6 +1,6 @@
 var getId = require('./utils').getId,
     utils = require('./morphic-test-utils'),
-    Page = require('./page');
+    Remote = require('./remote');
 
 var Selection = function(parent, selector) {
     var Should = require('./should');  // nested to avoid circular deps
@@ -15,7 +15,7 @@ var Selection = function(parent, selector) {
     this.should = new Should(this);
 };
 
-Selection.prototype = new Page();
+Selection.prototype = new Remote();
 
 Selection.prototype.init = function() {
     this.promise = this._parent.promise;
@@ -98,10 +98,7 @@ Selection.prototype.end = function(fn) {
             return this.page().evaluate(utils.delete(this._id));
         });
 
-    if (this._parent) {
-        this._parent.promise = this.promise;
-    }
-    return this._parent;
+    return Remote.prototype.end.apply(this, arguments);
 };
 
 module.exports = Selection;

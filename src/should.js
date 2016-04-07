@@ -1,7 +1,8 @@
 /////////////// Expectations/Testing ///////////////
 var Selection = require('./selection'),
     utils = require('./morphic-test-utils'),
-    Page = require('./page');
+    Remote = require('./remote'),
+    nop = function(){};
 
 var Should = function(parent, negated) {
     this._id = parent._id;
@@ -16,7 +17,7 @@ var Should = function(parent, negated) {
     this.have = new Have(parent);
 };
 
-Should.prototype = new Page();
+Should.prototype = new Remote();
 
 Should.prototype.be = function(value) {
     if (this._parent._equals) {
@@ -45,7 +46,7 @@ Should.prototype.be = function(value) {
             return Promise.reject(err);
         });
 
-    return Selection.prototype.end.call(this);
+    return this.end();
 };
 
 var Have = function(parent) {
@@ -54,7 +55,7 @@ var Have = function(parent) {
     this.promise = parent.promise;
 };
 
-Have.prototype = new Page();
+Have.prototype = new Remote();
 
 Have.prototype.length = function(value) {
     this.promise = this.promise
@@ -76,7 +77,8 @@ Have.prototype.length = function(value) {
 
             return Promise.reject(err);
         });
-    return Selection.prototype.end.call(this);
+
+    return this.end();
 };
 
 //Have.prototype.property = function(name, value) {

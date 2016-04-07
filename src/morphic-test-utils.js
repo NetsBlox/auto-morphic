@@ -47,17 +47,18 @@ var selectWorlds = function(id) {
 // Interaction
 var click = function(id) {
     var item,
-        clicked = false,
+        clicked = 0,
         pos;
 
     for (var i = Test.MEMORY[id].length; i--;) {
         item = Test.MEMORY[id][i];
         pos = item.bounds.center();
         item.mouseClickLeft(pos);
-        clicked = true;
+        clicked++;
     }
     
-    return clicked;
+    console.log('clicked ' + clicked + ' items');
+    return clicked !== 0;
 };
 
 // debugging

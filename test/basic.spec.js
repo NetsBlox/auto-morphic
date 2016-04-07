@@ -15,6 +15,13 @@ describe('selection', function() {
             .end(done)
     });
 
+    it('should find the world morph (using should)', function(done) {
+        client
+            .get(url)
+            .should.not.be(null)
+            .end(done)
+    });
+
     describe('selectors', function() {
 
         it('should find using .CLASS_NAME', function(done) {
@@ -92,6 +99,16 @@ describe('selection', function() {
                 .get(url)
                 .find('.NetsBloxMorph')
                     .should.have.length(1)
+                    .end()
+                .end(done)
+        });
+
+        it('should support chaining should\'s', function(done) {
+            client
+                .get(url)
+                .find('.NetsBloxMorph')
+                    .should.have.length(1)
+                    .should.not.be(null)
                     .end()
                 .end(done)
         });
