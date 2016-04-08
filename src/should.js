@@ -32,8 +32,8 @@ Should.prototype.be = function(value) {
     this.promise = this.promise
         .then(res => {
             if (res !== !this.negated) {
-                return Promise.reject(this._parent.toString() + ' should ' +
-                    (this.negated ? 'not' : '') + ' be ' + value);
+                return Promise.reject(this._parent.toString() + ' should' +
+                    (this.negated ? ' not' : '') + ' be ' + JSON.stringify(value));
             }
         })
         .catch(err => {
@@ -65,7 +65,7 @@ Have.prototype.length = function(value) {
         .then(len => {
             if (len !== value) {
                 return Promise.reject(this._parent.toString() + ' should ' +
-                    ` have length ${value} but has length ${len}`);
+                    `have length ${value} but has length ${len}`);
             }
         })
         .catch(err => {

@@ -126,18 +126,53 @@ describe('selection', function() {
     });
 
     // Clicking
-    it('should support clicking on elements', function(done) {
-        // Click on the project menu
-        client
-            .get(url)
-            // Get the controlBar
-            .find('.NetsBloxMorph.PushButtonMorph[action="projectMenu"]')
-                .click()
-                .end()
-            .find('.MenuMorph')
-                .should.not.be(null)
-                .end()
-            .end(done)
-    });
+    describe('interaction', function() {
+        it('should support clicking on elements', function(done) {
+            // Click on the project menu
+            client
+                .get(url)
+                // Get the controlBar
+                .find('.NetsBloxMorph.PushButtonMorph[action="projectMenu"]')
+                    .click()
+                    .end()
+                .find('.MenuMorph')
+                    .should.not.be(null)
+                    .end()
+                .end(done)
+        });
 
+        it('should support entering text', function(done) {
+            client
+                .get(url)
+                // Click the cloud button
+                .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
+                    .click()
+                    .end()
+
+                // Select Login...
+                .find('.MenuMorph.MenuItemMorph[labelString="Login..."]')
+                    .should.have.length(1)
+                    .click()
+                    .end()
+
+                // Fill in the Sign in dialog
+                .find('.DialogBoxMorph[labelString="Sign in"]')
+                    .should.have.length(1)
+                    .find('.InputFieldMorph[key="user"]')
+                        .should.have.length(1)
+                        .end()
+                    .type('hello')
+                    .find('.InputFieldMorph[key="user"].StringFieldMorph')
+                        .should.have.length(1)
+                        .attr('text')
+                            .should.not.be(null)
+                            .attr('text')
+                                .should.be('hello')
+                                .end()
+                            .end()
+                        .end()
+                    .end()
+                .end(done)
+        });
+    });
 });
