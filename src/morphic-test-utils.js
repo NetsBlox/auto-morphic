@@ -2,8 +2,22 @@
 
 var select = function(id, root, selector) {
     var selection = Test.Select(selector, Test.MEMORY[root] || []);
-    console.log('storing ' + selector + ' selection at ' + id);
     Test.MEMORY[id] = selection;
+    return id;
+};
+
+var attr = function(id, root, attr) {
+    var roots = Test.MEMORY[root] || [],
+        results = [];
+
+    for (var i = roots.length; i--;) {
+        if (roots[i].hasOwnProperty(attr)) {
+            results.push(roots[i][attr]);
+        }
+    }
+
+    console.log('found ' + results.length + ' w/ attr "' + attr + '"');
+    Test.MEMORY[id] = results;
     return id;
 };
 
@@ -61,6 +75,30 @@ var click = function(id) {
     return clicked !== 0;
 };
 
+var type = function(id, text) {
+    var selection = Test.MEMORY[id],
+        worlds = [],
+        world,
+        i;
+
+    for (i = selection.length; i--;) {
+        world = selection[i].world();
+        if (worlds.indexOf(world) === -1) {
+            console.log('found a world!');
+            worlds.push(world);
+        }
+    }
+
+    for (i = 0; i < text.length; i++) {
+        event = {charCode: text.charCodeAt(i)};  // TODO: Add shift, ctrl?
+        for (var w = worlds.length; w--;) {
+            worlds[w].keyboardReceiver.processKeyPress(event);
+        }
+    }
+
+    return worlds.length > 0;
+};
+
 // debugging
 var addresses = function() {
     return Object.keys(Test.MEMORY);
@@ -72,14 +110,20 @@ var hello = function() {
 
 var utils = {
     select: select,
-    click: click,
+    attr: attr,
     retrieve: retrieve,
     length: length,
     selectWorlds: selectWorlds,
     equal: equal,
     allEqual: allEqual,
+
+    // debugging
     hello: hello,
     addresses: addresses,
+
+    // interaction
+    click: click,
+    type: type,
     delete: function(id) {
         delete Test.MEMORY[id];
     }

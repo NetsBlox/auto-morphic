@@ -62,6 +62,26 @@ Selection.prototype.find = function(selector) {
     return new Selection(this, selector);
 };
 
+Selection.prototype.attr = function(name) {
+    var Attribute = require('./attribute');
+    return new Attribute(this, name);
+};
+
+Selection.prototype.end = function(fn) {
+    if (fn) {
+        this.promise = this.promise.then(fn);
+    }
+
+    // Clear memory
+    this.promise = this.promise
+        .then(() => {
+            return this.page().evaluate(utils.delete(this._id));
+        });
+
+    return Remote.prototype.end.apply(this, arguments);
+};
+
+/////////////////// Interactions ///////////////////
 Selection.prototype.click = function() {
     this.promise = this.promise
         .then(() => {
@@ -78,27 +98,20 @@ Selection.prototype.click = function() {
     return this;
 };
 
-Selection.prototype.attr = function(name) {
-    var values = this.map(item => {
-            return item[name];
-        })
-        .filter(attr => !!attr);
-
-    return new Attributes(this, values);
-};
-
-Selection.prototype.end = function(fn) {
-    if (fn) {
-        this.promise = this.promise.then(fn);
-    }
-
-    // Clear memory
+Selection.prototype.type = function(text) {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.delete(this._id));
+            return this.page().evaluate(utils.type(this._id, text));
+        })
+        .then(typed => {
+            if (!typed) {
+                var msg = `${this.toString()} is empty. Cannot type without a context - is` +
+                    ` your selection valid?.`;
+                console.error(msg);
+                throw Error(msg);
+            }
         });
-
-    return Remote.prototype.end.apply(this, arguments);
+    return this;
 };
 
 module.exports = Selection;
