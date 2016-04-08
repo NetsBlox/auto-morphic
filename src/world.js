@@ -6,6 +6,7 @@ var phantom = require('phantom'),
     helpersPath = path.join(__dirname, 'morphic-helpers.js'),
     Selection = require('./selection'),
     getId = require('./utils').getId,
+    size = {width: 1024, height: 768},
     nop = () => {};
 
 // TODO: Add logger
@@ -30,6 +31,20 @@ var World = function(url, done) {
                 console.log(msg);
             });
 
+            // Prep for screenshots
+            return this._page.property('viewPortSize', size);
+        })
+        .then(() => {
+            this._page.property('viewPortSize').then(size => console.log(size));
+            return this._page.property('clipRect', {
+                top: 0,
+                left: 0,
+                width: 2000,
+                height: 2000
+            });
+        })
+        .then(res => {
+            console.log('res:', res);
             return this.page().open(url);
         })
         .then(status => {
@@ -62,7 +77,7 @@ World.prototype.end = function(fn) {
     });
 };
 
-World.prototype.init = nop;
+World.prototype._init = nop;
 
 module.exports = {
     get: function(url, done) {
