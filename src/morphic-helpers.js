@@ -9,9 +9,6 @@ var Test = {};  // namespace
     var Selector = function(selector) {
     };
 
-    // tl;dr selectors: '.CLASS_NAME', '#id', or '[attribute]'
-    Selector.SELECTORS = /(#[a-zA-Z_]{1}[a-zA-Z0-9_]*|)/;
-
     Selector.prototype._select = function(root) {
         // Search for children of the given class in the subtree
         // once we find a child, stop searching that tree
@@ -58,7 +55,7 @@ var Test = {};  // namespace
         return node.constructor.name === this._class;
     };
 
-    // Select using .CLASS_NAME (like '.IDE_Morph')
+    // Select using [ATTR] or [ATTR="value"] (like '[name="fred"]')
     var AttributeSelector = function(selector) {
         console.log('Creating attribute selector with ' + selector);
         var match = selector.match(AttributeSelector.regex);
@@ -68,7 +65,7 @@ var Test = {};  // namespace
     };
     
     AttributeSelector.prototype = new Selector();
-    AttributeSelector.regex = /\[([a-zA-Z_]{1}[a-zA-Z0-9_]*)(=("[a-zA-Z_]{1}[a-zA-Z0-9_\s\.]*"|[0-9]+|(true|false)))?\]/;
+    AttributeSelector.regex = /\[([a-zA-Z_]{1}[a-zA-Z0-9_]*)(=("[a-zA-Z_\-0-9]{1}[a-zA-Z0-9\-_\s\.]*"|[0-9]+|(true|false)))?\]/;
 
     AttributeSelector.prototype._matches = function(node) {
         return this._hasValue ? node[this._attr] === this._value : node.hasOwnProperty(this._attr);
