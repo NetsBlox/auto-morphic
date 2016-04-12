@@ -4,6 +4,7 @@ var phantom = require('phantom'),
     extend = require('object-concat'),
     utils = require('./morphic-test-utils'),
     helpersPath = path.join(__dirname, 'morphic-helpers.js'),
+    shimPath = path.join(__dirname, 'phantom-shim.js'),
     Selection = require('./selection'),
     getId = require('./utils').getId,
     nop = () => {};
@@ -32,7 +33,12 @@ var World = function(url, done) {
 
             return this.page().open(url);
         })
+        // Inject extra javascript (shim and helpers)
         .then(status => {
+            return this.page().injectJs(shimPath);
+        })
+        .then(status => {
+            assert(status, 'injecting the shim failed');
             return this.page().injectJs(helpersPath);
         })
         .then(status => {  // retrieve the world object
