@@ -174,5 +174,49 @@ describe('selection', function() {
                     .end()
                 .end(done)
         });
+
+        it('should trigger callback w/ error if inspect fails', function(done) {
+            client
+                .get(url)
+                // Click the cloud button
+                .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
+                    .click()
+                    .end()
+
+                // Select Login...
+                .find('.MenuMorph.MenuItemMorph[labelString="Login..."]')
+                    .should.have.length(1)
+                    .click()
+                    .end()
+
+                // Fill in the Sign in dialog
+                .find('.DialogBoxMorph[labelString="Sign in"]')
+                    .should.have.length(1)
+                    .find('.InputFieldMorph[key="user"]')
+                        .should.have.length(1)
+                        .end()
+                    .type('hello')
+                    .find('.InputFieldMorph[key="user"].StringFieldMorph')
+                        .should.have.length(1)
+                        .attr('text')
+                            .should.not.be(null)
+                            .attr('text')
+                                .should.be('hello')
+                                .inspect(data => {
+                                    var txt = data[0];
+                                    assert.equal(txt, 'asdf', 'INSPECT_ERROR');
+                                })
+                                .end()
+                            .end()
+                        .end()
+                    .end()
+                .end(function(err) {
+                    if (err.message.indexOf('INSPECT_ERROR') > -1) {
+                        done();
+                    } else {
+                        done(Error('inspect failed silently'));
+                    }
+                });
+        });
     });
 });
