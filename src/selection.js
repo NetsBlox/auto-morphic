@@ -15,6 +15,7 @@ var Selection = function(parent, selector) {
     this.should = new Should(this);
 };
 
+Selection.SEARCH_DURATION = 500 * 1000;
 Selection.prototype = new Remote();
 
 Selection.prototype.init = function() {

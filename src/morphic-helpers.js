@@ -6,6 +6,7 @@ var Test = {};  // namespace
     var MEMORY = {};
 
     //////////// Selection ////////////
+    var SEARCH_DURATION = 500 * 1000;
     var Selector = function(selector) {
     };
 
@@ -95,13 +96,15 @@ var Test = {};  // namespace
         return null;
     };
 
-    var Select = function(string, roots) {
+    var Select = function(id, roots, string) {
         var match = matchSelector(string),
+            searchString = string.slice(),
             selector,
             s,
             selectors = [],
             nodes;
 
+        roots = roots || [];
         while (match) {
             s = match[0];
             selector = match[1];
@@ -110,14 +113,25 @@ var Test = {};  // namespace
             string = string.substring(s.length);
             match = matchSelector(string);
         }
+        return _Select(id, roots, selectors, Date.now());
+    };
 
+    var _Select = function(id, nodes, selectors, start) {
         // use the selectors in order on the root nodes
-        nodes = roots;
         for (var i = 0; i < selectors.length; i++) {
             nodes = selectors[i].select(nodes);
         }
         console.log('selected ' + nodes.length + ' items');
-        return nodes;
+
+        Test.MEMORY[id] = nodes;
+
+        if (!nodes.length && Date.now() < (start + SEARCH_DURATION)) {
+            console.log('gonna search again');
+            console.log('world children:', world.children);
+            setTimeout(_Select, 50, id, nodes, selectors, start);
+        }
+
+        return !!nodes.length;
     };
 
     global.MEMORY = MEMORY;

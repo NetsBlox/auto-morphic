@@ -1,9 +1,7 @@
 // This should contain a bunch of methods to be serialized and run in phantomjs
 
 var select = function(id, root, selector) {
-    var selection = Test.Select(selector, Test.MEMORY[root] || []);
-    Test.MEMORY[id] = selection;
-    return id;
+    return Test.Select(id, Test.MEMORY[root] || [], selector);
 };
 
 var attr = function(id, root, attr) {
@@ -22,12 +20,12 @@ var attr = function(id, root, attr) {
 };
 
 var equal = function(id, value) {
-    console.log('comparing ' + JSON.stringify(Test.MEMORY[id]) + ' to ' + value);
+    //console.log('comparing ' + JSON.stringify(Test.MEMORY[id]) + ' to ' + value);
     return Test.MEMORY[id] == value;
 };
 
 var allEqual = function(id, value) {
-    return Test.MEMORY[id].length && Test.MEMORY[id]
+    return Test.MEMORY[id] && Test.MEMORY[id].length && Test.MEMORY[id]
         .reduce(function(prev, curr) {
             return prev && curr == value;
         }, true);
