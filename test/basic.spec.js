@@ -83,37 +83,6 @@ describe('selection', function() {
             .end(done);
     });
 
-    describe('"should"', function() {
-
-        it('should support basic "should" syntax', function(done) {
-            client
-                .get(url)
-                .find('.NetsBloxMorph')
-                    .should.not.be(null)
-                    .end()
-                .end(done)
-        });
-
-        it('should support "should.have.length"', function(done) {
-            client
-                .get(url)
-                .find('.NetsBloxMorph')
-                    .should.have.length(1)
-                    .end()
-                .end(done)
-        });
-
-        it('should support chaining should\'s', function(done) {
-            client
-                .get(url)
-                .find('.NetsBloxMorph')
-                    .should.have.length(1)
-                    .should.not.be(null)
-                    .end()
-                .end(done)
-        });
-    });
-
     it('should find PushButtonMorph', function(done) {
         // Click on the project menu
         client
