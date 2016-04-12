@@ -34,9 +34,21 @@ Selection.prototype.inspect = function(fn) {
         })
         .then(res => {
             fn(res);
+        })
+        .catch(err => {
+            this.fail(err);
+            return Promise.reject(err);
         });
 
     return this;
+};
+
+Selection.prototype.fail = function(err) {
+    // This is not the ideal way to throw errors. Basically,
+    // I am just skipping to the end...
+    // FIXME
+    var result = this.root().done(Error(err));
+    this.root().done = nop;
 };
 
 Selection.prototype._select = function(selector) {
