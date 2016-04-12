@@ -1,6 +1,7 @@
 var getId = require('./utils').getId,
     utils = require('./morphic-test-utils'),
-    Remote = require('./remote');
+    Remote = require('./remote'),
+    nop = function(){};
 
 var Selection = function(parent, selector) {
     var Should = require('./should');  // nested to avoid circular deps

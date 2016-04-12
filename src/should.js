@@ -1,8 +1,7 @@
 /////////////// Expectations/Testing ///////////////
 var Selection = require('./selection'),
     utils = require('./morphic-test-utils'),
-    Remote = require('./remote'),
-    nop = function(){};
+    Remote = require('./remote');
 
 var Should = function(parent, negated) {
     this._id = parent._id;
@@ -37,13 +36,7 @@ Should.prototype.be = function(value) {
             }
         })
         .catch(err => {
-            // This is not the ideal way to throw errors. Basically,
-            // I am just skipping to the end...
-            // FIXME
-            var result = this._parent.root().done(Error(err));
-            this._parent.root().done = nop;
-
-            return Promise.reject(err);
+            return this._parent.fail(err);
         });
 
     return this.end();
@@ -69,13 +62,7 @@ Have.prototype.length = function(value) {
             }
         })
         .catch(err => {
-            // This is not the ideal way to throw errors. Basically,
-            // I am just skipping to the end...
-            // FIXME
-            var result = this._parent.root().done(Error(err));
-            this._parent.root().done = nop;
-
-            return Promise.reject(err);
+            return this._parent.fail(err);
         });
 
     return this.end();
