@@ -6,7 +6,7 @@ var Test = {};  // namespace
     var MEMORY = {};
 
     //////////// Selection ////////////
-    var SEARCH_DURATION = 500 * 1000;
+    var SEARCH_DURATION = 5 * 1000;
     var Selector = function(selector) {
     };
 
@@ -45,7 +45,6 @@ var Test = {};  // namespace
 
     // Select using .CLASS_NAME (like '.IDE_Morph')
     var ClassSelector = function(selector) {
-        console.log('Creating class selector with ' + selector);
         this._class = selector.slice(1);
     };
     
@@ -56,17 +55,24 @@ var Test = {};  // namespace
         return node.constructor.name === this._class;
     };
 
+    ClassSelector.prototype.toString = function() {
+        return '.' + this._class;
+    };
+
     // Select using [ATTR] or [ATTR="value"] (like '[name="fred"]')
     var AttributeSelector = function(selector) {
-        console.log('Creating attribute selector with ' + selector);
         var match = selector.match(AttributeSelector.regex);
         this._attr = match[1];
         this._hasValue = selector.indexOf('=') !== -1;
         this._value = this._hasValue ? JSON.parse(match[3]) : null;
     };
-    
+
     AttributeSelector.prototype = new Selector();
     AttributeSelector.regex = /\[([a-zA-Z_]{1}[a-zA-Z0-9_]*)(=("[a-zA-Z_\-0-9]{1}[a-zA-Z0-9\-_\s\.]*"|[0-9]+|(true|false)))?\]/;
+
+    AttributeSelector.prototype.toString = function() {
+        return '[' + this._attr + '=' + this._value + ']';
+    };
 
     AttributeSelector.prototype._matches = function(node) {
         return this._hasValue ? node[this._attr] === this._value : node.hasOwnProperty(this._attr);
@@ -96,6 +102,12 @@ var Test = {};  // namespace
         return null;
     };
 
+    var assert = function(cond, msg) {
+        if (!cond) {
+            throw new Error(msg || 'Assert failed');
+        }
+    };
+
     var Select = function(id, roots, string) {
         var match = matchSelector(string),
             searchString = string.slice(),
@@ -105,6 +117,7 @@ var Test = {};  // namespace
             nodes;
 
         roots = roots || [];
+        assert(roots.length);
         while (match) {
             s = match[0];
             selector = match[1];
@@ -116,19 +129,17 @@ var Test = {};  // namespace
         return _Select(id, roots, selectors, Date.now());
     };
 
-    var _Select = function(id, nodes, selectors, start) {
+    var _Select = function(id, roots, selectors, start) {
+        var nodes = roots;
         // use the selectors in order on the root nodes
         for (var i = 0; i < selectors.length; i++) {
             nodes = selectors[i].select(nodes);
         }
-        console.log('selected ' + nodes.length + ' items');
 
         Test.MEMORY[id] = nodes;
 
         if (!nodes.length && Date.now() < (start + SEARCH_DURATION)) {
-            console.log('gonna search again');
-            console.log('world children:', world.children);
-            setTimeout(_Select, 50, id, nodes, selectors, start);
+            return setTimeout(_Select, 50, id, roots, selectors, start);
         }
 
         return !!nodes.length;
@@ -137,5 +148,4 @@ var Test = {};  // namespace
     global.MEMORY = MEMORY;
     global.Selector = Selector;
     global.Select = Select;
-
 })(Test);

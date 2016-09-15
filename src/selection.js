@@ -1,5 +1,6 @@
 var getId = require('./utils').getId,
     utils = require('./morphic-test-utils'),
+    Q = require('q'),
     Remote = require('./remote'),
     nop = function(){};
 
@@ -16,7 +17,7 @@ var Selection = function(parent, selector) {
     this.should = new Should(this);
 };
 
-Selection.SEARCH_DURATION = 500 * 1000;
+Selection.SEARCH_DURATION = 5000;
 Selection.prototype = new Remote();
 
 Selection.prototype.init = function() {
@@ -59,6 +60,27 @@ Selection.prototype._select = function(selector) {
     this.promise = this.promise
         .then(() => {
             return this.page().evaluate(utils.select(this._id, root, selector));
+        })
+        .then(() => {
+            var deferred = Q.defer(),
+                start = Date.now(),
+                query;
+
+            // poll until timeout reached or a value is found
+            query = (success, fail) => {
+                return this.page().evaluate(utils.length(this._id))
+                    .then(len => {
+                        if (len !== 0) {
+                            return success();
+                        } else if ((Date.now() - start) > Selection.SEARCH_DURATION) {
+                            return fail();
+                        }
+                        return setTimeout(query, 250, success, fail);
+                    });
+            };
+
+            query(deferred.resolve, this.fail);
+            return deferred.promise;
         });
 };
 

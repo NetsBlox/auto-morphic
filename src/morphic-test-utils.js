@@ -14,13 +14,13 @@ var attr = function(id, root, attr) {
         }
     }
 
-    console.log('found ' + results.length + ' w/ attr "' + attr + '"');
+    //logger.log('found ' + results.length + ' w/ attr "' + attr + '"');
     Test.MEMORY[id] = results;
     return id;
 };
 
 var equal = function(id, value) {
-    //console.log('comparing ' + JSON.stringify(Test.MEMORY[id]) + ' to ' + value);
+    //logger.log('comparing ' + JSON.stringify(Test.MEMORY[id]) + ' to ' + value);
     return Test.MEMORY[id] == value;
 };
 
@@ -32,7 +32,6 @@ var allEqual = function(id, value) {
 };
 
 var retrieve = function(id) {
-    console.log('retrieving from ' + id);
     return Test.MEMORY[id];
 };
 
@@ -50,8 +49,7 @@ var selectWorlds = function(id) {
         }
     }
 
-    console.log('found ' + matches.length + ' world(s)');
-    console.log('storing world(s) at ' + id);
+    //logger.log('storing world(s) at ' + id);
     Test.MEMORY[id] = matches;
     return id;
 };
@@ -69,7 +67,7 @@ var click = function(id) {
         clicked++;
     }
     
-    console.log('clicked ' + clicked + ' items');
+    //logger.log('clicked ' + clicked + ' items');
     return clicked !== 0;
 };
 
@@ -82,7 +80,6 @@ var type = function(id, text) {
     for (i = selection.length; i--;) {
         world = selection[i].world();
         if (worlds.indexOf(world) === -1) {
-            console.log('found a world!');
             worlds.push(world);
         }
     }
