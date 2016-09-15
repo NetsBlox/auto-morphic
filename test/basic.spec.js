@@ -1,7 +1,7 @@
 /*globals describe,it,before,beforeEach*/
 var client = require('../'),
     assert = require('assert'),
-    url = 'http://localhost:8080/netsblox-dev.html';
+    url = 'https://dev.netsblox.org';
 
 describe('selection', function() {
     this.timeout(5000);
