@@ -1,6 +1,6 @@
 var client = require('../'),
     assert = require('assert'),
-    url = 'http://editor.netsblox.org';
+    url = 'http://dev.netsblox.org';
 
 describe('"should"', function() {
 

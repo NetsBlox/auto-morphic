@@ -6,14 +6,14 @@ Auto-morphic is a automated testing utility for [morphic.js](https://github.com/
 As morphic does not use html elements (rather, it uses `Morph`s), existing frameworks cannot automate interaction with a morphic project. Auto-morphic provides a way to automate interaction on these types of sites. However, this requires some concepts, such as selectors (eg, '.myClass.otherClass' or '#myId'), being redesigned to fit the morphic context.
 
 ## Examples
-A simple example of retrieving the `NetsBloxMorph`, the IDE in [netsblox](http://netsblox.org), is shown below:
+A simple example of retrieving the `NetsBloxMorph`, the IDE in [netsblox](https://netsblox.org), is shown below:
 
 ```javascript
 var client = require('auto-morphic'),
     assert = require('assert');
 
 client
-    .get('http://editor.netsblox.org')
+    .get('https://editor.netsblox.org')
     .find('.NetsBloxMorph')
         .should.not.be(null)
         .end()

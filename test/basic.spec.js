@@ -1,7 +1,7 @@
 /*globals describe,it,before,beforeEach*/
 var client = require('../'),
     assert = require('assert'),
-    url = 'http://editor.netsblox.org';
+    url = 'https://dev.netsblox.org';
 
 describe('selection', function() {
     this.timeout(5000);
@@ -71,13 +71,16 @@ describe('selection', function() {
 
         stageSelection = wSelection
             .find('.NetsBloxMorph.StageMorph')
-            .inspect(res => assert(!!res));
+            .inspect(res => {
+                // Swap the pointers!
+                wSelection._id = stageSelection._id;
+                // After the stageSelection is cleared, the wSelection should be a null ptr
+                assert(!!res);
+            });
 
-        wSelection._id = stageSelection._id;
 
         // Terminate the stage selection
-        stageSelection
-            .end();
+        stageSelection.end();
 
         wSelection.inspect(res => assert(!res))
             .end(done);
@@ -149,6 +152,7 @@ describe('selection', function() {
                 .get(url)
                 // Click the cloud button
                 .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
+                    .should.have.length(1)
                     .click()
                     .end()
 

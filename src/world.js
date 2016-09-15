@@ -14,8 +14,8 @@ var phantom = require('phantom'),
 var World = function(url, done) {
     Selection.call(this, null, null);
     // using promises here so we can chain stuff
-    this.done = nop;
-    this.promise = phantom.create()
+    this.done = done || nop;
+    this.promise = phantom.create(['--ignore-ssl-errors=true'])
         .then(browser => {
             this._browser = browser;
             return this._browser.createPage();
@@ -29,6 +29,10 @@ var World = function(url, done) {
 
             this._page.property('onError', function(msg) {
                 console.log(msg);
+            });
+
+            this._page.property('onResourceError', function(msg) {
+                console.log(JSON.stringify(msg, null, 2));
             });
 
             return this.page().open(url);
@@ -45,7 +49,7 @@ var World = function(url, done) {
             assert(status, 'injecting the helpers failed');
             return this.page().evaluate(utils.selectWorlds(this._id));
         })
-        .then(done || () => {})
+        .then(done)
         .catch(err => {
             console.error('Error in callback!', err);
             this._browser.exit();
