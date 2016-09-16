@@ -33,10 +33,11 @@ Selection.prototype.toString = function() {
 Selection.prototype.inspect = function(fn) {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.retrieve(this._id));
+            console.log('inspecting', this._id);
+            return this.page().execute(utils.retrieve, this._id);
         })
         .then(res => {
-            fn(res);
+            fn(res.value);
         })
         .catch(err => {
             this.fail(err);
@@ -59,35 +60,14 @@ Selection.prototype._select = function(selector) {
 
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.select(this._id, root, selector));
-        })
-        .then(() => {
-            var deferred = Q.defer(),
-                start = Date.now(),
-                query;
-
-            // poll until timeout reached or a value is found
-            query = (success, fail) => {
-                return this.page().evaluate(utils.length(this._id))
-                    .then(len => {
-                        if (len !== 0) {
-                            return success();
-                        } else if ((Date.now() - start) > Selection.SEARCH_DURATION) {
-                            return fail();
-                        }
-                        return setTimeout(query, 250, success, fail);
-                    });
-            };
-
-            query(deferred.resolve, this.fail);
-            return deferred.promise;
+            return this.page().executeAsync(utils.select, this._id, root, selector);
         });
 };
 
 Selection.prototype._equals = function(value) {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.allEqual(this._id, value));
+            return this.page().execute(utils.allEqual, this._id, value);
         });
 
     return this.promise;
@@ -111,7 +91,7 @@ Selection.prototype.end = function(fn) {
     // Clear memory
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.delete(this._id));
+            return this.page().execute(utils.delete, this._id);
         });
 
     return Remote.prototype.end.apply(this, arguments);
@@ -121,7 +101,7 @@ Selection.prototype.end = function(fn) {
 Selection.prototype.click = function() {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.click(this._id));
+            return this.page().execute(utils.click, this._id);
         })
         .then(clicked => {
             if (!clicked) {
@@ -137,7 +117,7 @@ Selection.prototype.click = function() {
 Selection.prototype.type = function(text) {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.type(this._id, text));
+            return this.page().execute(utils.type, this._id, text);
         })
         .then(typed => {
             if (!typed) {

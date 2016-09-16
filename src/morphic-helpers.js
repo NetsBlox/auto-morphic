@@ -1,5 +1,5 @@
 // This contains the morphic testing helpers to be loaded on the client
-var Test = {};  // namespace
+window.Test = {};  // namespace
 
 (function(global) {
 
@@ -108,7 +108,7 @@ var Test = {};  // namespace
         }
     };
 
-    var Select = function(id, roots, string) {
+    var Select = function(id, roots, string, done) {
         var match = matchSelector(string),
             searchString = string.slice(),
             selector,
@@ -126,10 +126,10 @@ var Test = {};  // namespace
             string = string.substring(s.length);
             match = matchSelector(string);
         }
-        return _Select(id, roots, selectors, Date.now());
+        return _Select(id, roots, selectors, Date.now(), done);
     };
 
-    var _Select = function(id, roots, selectors, start) {
+    var _Select = function(id, roots, selectors, start, done) {
         var nodes = roots;
         // use the selectors in order on the root nodes
         for (var i = 0; i < selectors.length; i++) {
@@ -139,10 +139,12 @@ var Test = {};  // namespace
         Test.MEMORY[id] = nodes;
 
         if (!nodes.length && Date.now() < (start + SEARCH_DURATION)) {
-            return setTimeout(_Select, 50, id, roots, selectors, start);
+            return setTimeout(_Select, 50, id, roots, selectors, start, done);
         }
 
-        return !!nodes.length;
+        console.log('found ', nodes[0]);
+        return done(nodes.length);
+        return done(nodes[0]);
     };
 
     global.MEMORY = MEMORY;

@@ -6,6 +6,12 @@ var client = require('../'),
 describe('selection', function() {
     this.timeout(5000);
 
+    it('should get the url', function(done) {
+        client
+            .get(url)
+            .end(done);
+    });
+
     it('should find the world morph', function(done) {
         client
             .get(url)
@@ -22,7 +28,7 @@ describe('selection', function() {
             .end(done)
     });
 
-    describe('selectors', function() {
+    describe.only('selectors', function() {
 
         it('should find using .CLASS_NAME', function(done) {
             client
@@ -37,11 +43,7 @@ describe('selection', function() {
             client
                 .get(url)
                 .find('.NetsBloxMorph.StageMorph')
-                    .inspect(result => {
-                        var stage = result[0];
-                        assert.equal(result.length, 1);
-                        assert.equal(stage.name, 'Stage');
-                    })
+                    .should.have.length(1)
                     .end()
                 .end(done)
         });

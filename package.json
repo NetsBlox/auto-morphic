@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "object-concat": "^0.2.9",
-    "phantom": "^2.0.10",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "webdriverio": "^4.2.15"
   }
 }

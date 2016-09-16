@@ -24,13 +24,13 @@ Should.prototype.be = function(value) {
     } else {
         this.promise = this.promise
             .then(() => {
-                return this.page().evaluate(utils.equal(this._id, value));
+                return this.page().execute(utils.equal, this._id, value);
             })
     }
 
     this.promise = this.promise
         .then(res => {
-            if (res !== !this.negated) {
+            if (res.value !== !this.negated) {
                 return Promise.reject(this._parent.toString() + ' should' +
                     (this.negated ? ' not' : '') + ' be ' + JSON.stringify(value));
             }
@@ -53,10 +53,11 @@ Have.prototype = new Remote();
 Have.prototype.length = function(value) {
     this.promise = this.promise
         .then(() => {
-            return this.page().evaluate(utils.length(this._id));
+            return this.page().execute(utils.length, this._id);
         })
-        .then(len => {
-            if (len !== value) {
+        .then(result => {
+            var len = result.value;
+            if (len!== value) {
                 return Promise.reject(this._parent.toString() + ' should ' +
                     `have length ${value} but has length ${len}`);
             }

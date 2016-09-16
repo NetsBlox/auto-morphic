@@ -1,7 +1,7 @@
 // This should contain a bunch of methods to be serialized and run in phantomjs
 
-var select = function(id, root, selector) {
-    return Test.Select(id, Test.MEMORY[root] || [], selector);
+var select = function(id, root, selector, done) {
+    return Test.Select(id, Test.MEMORY[root] || [], selector, done);
 };
 
 var attr = function(id, root, attr) {
@@ -51,7 +51,7 @@ var selectWorlds = function(id) {
 
     //logger.log('storing world(s) at ' + id);
     Test.MEMORY[id] = matches;
-    return id;
+    return matches.length;
 };
 
 // Interaction
@@ -126,45 +126,45 @@ var utils = {
 };
 
 // Now some weird things happen to allow passing args btwn contexts...
-var createFn = function(fn, args) {
-    var defArgs,  // define arguments
-        newFn = fn;
+//var createFn = function(fn, args) {
+    //var defArgs,  // define arguments
+        //newFn = fn;
 
-    if (args.length) {
-        defArgs = [];
+    //if (args.length) {
+        //defArgs = [];
 
-        for (var i = args.length; i--;) {
-            defArgs.push(args[i] + ' = ' + JSON.stringify(arguments[i+2]));
-        }
+        //for (var i = args.length; i--;) {
+            //defArgs.push(args[i] + ' = ' + JSON.stringify(arguments[i+2]));
+        //}
 
-        newFn = fn.replace('{', '{\n\tvar ' + defArgs.join(',\n\t\t') + ';\n')
-            .replace(/\t/g, '    ');  // tabs are 4 spaces (for debugging purposes)
-    }
+        //newFn = fn.replace('{', '{\n\tvar ' + defArgs.join(',\n\t\t') + ';\n')
+            //.replace(/\t/g, '    ');  // tabs are 4 spaces (for debugging purposes)
+    //}
 
-    return newFn;
-};
+    //return newFn;
+//};
 
-// Convert the functions to templates
-var fn,
-    argRegex = /\(([\s]*[a-zA-Z_]{1}[a-zA-Z0-9_\s,]*)\)/,
-    matches,
-    args,
-    newFn;
+//// Convert the functions to templates
+//var fn,
+    //argRegex = /\(([\s]*[a-zA-Z_]{1}[a-zA-Z0-9_\s,]*)\)/,
+    //matches,
+    //args,
+    //newFn;
 
-    // Add arrow fns with a single arg
-    // TODO
+    //// Add arrow fns with a single arg
+    //// TODO
 
-for (var key in utils) {
-    fn = utils[key].toString();
-    matches = fn.match(argRegex);
-    newFn = fn.replace(argRegex, '()');
-    args = [];
+//for (var key in utils) {
+    //fn = utils[key].toString();
+    //matches = fn.match(argRegex);
+    //newFn = fn.replace(argRegex, '()');
+    //args = [];
 
-    if (matches) {
-        args = matches[1].replace(/\s*/g, '').split(',');
-    }
+    //if (matches) {
+        //args = matches[1].replace(/\s*/g, '').split(',');
+    //}
 
-    utils[key] = createFn.bind(null, newFn, args);
-}
+    //utils[key] = createFn.bind(null, newFn, args);
+//}
 
 module.exports = utils;
