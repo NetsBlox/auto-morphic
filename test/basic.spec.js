@@ -1,12 +1,21 @@
 /*globals describe,it,before,beforeEach*/
 var client = require('../'),
     assert = require('assert'),
-    url = 'https://dev.netsblox.org';
+    url = 'https://dev.netsblox.org',
+    world;
 
 describe('selection', function() {
     this.timeout(5000);
 
-    it('should get the url', function(done) {
+    before(function() {
+        world = client.get(url);
+    });
+
+    afterEach(function() {
+        world.refresh();
+    });
+
+    it.skip('should get the url', function(done) {
         client
             .get(url)
             .end(done);
@@ -29,10 +38,12 @@ describe('selection', function() {
     });
 
     describe.only('selectors', function() {
+        afterEach(function() {
+            world.refresh();
+        });
 
         it('should find using .CLASS_NAME', function(done) {
-            client
-                .get(url)
+            world
                 .find('.NetsBloxMorph')
                     .should.not.be(null)
                     .end()
@@ -40,8 +51,7 @@ describe('selection', function() {
         });
 
         it('should find using nested .CLASS_NAME\'s', function(done) {
-            client
-                .get(url)
+            world
                 .find('.NetsBloxMorph.StageMorph')
                     .should.have.length(1)
                     .end()
@@ -49,8 +59,7 @@ describe('selection', function() {
         });
 
         it('should find MenuItemMorph by labelString', function(done) {
-            client
-                .get(url)
+            world
                 // Get the controlBar
                 .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
                     .click()
@@ -68,7 +77,7 @@ describe('selection', function() {
             stageSelection,
             id;
 
-        wSelection = client.get(url);
+        wSelection = world;
         id = wSelection._id;
 
         stageSelection = wSelection
@@ -84,14 +93,16 @@ describe('selection', function() {
         // Terminate the stage selection
         stageSelection.end();
 
-        wSelection.inspect(res => assert(!res))
-            .end(done);
+        wSelection.inspect(res => {
+            assert(!res);
+            wSelection._id = id;
+            done();
+        });
     });
 
     it('should find PushButtonMorph', function(done) {
         // Click on the project menu
-        client
-            .get(url)
+        world
             // Get the controlBar
             .find('.NetsBloxMorph.PushButtonMorph')
                 .should.not.be(null)

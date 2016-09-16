@@ -21,13 +21,18 @@ var webdriverio = require('webdriverio'),
 
 var World = function(url) {
     Selection.call(this, null, null);
-    // using promises here so we can chain stuff
     this._page = webdriverio
         .remote(opts)
         .init()
         .url(url);
 
-    console.log('about to execute helpers!');
+    this.prepare();
+};
+
+World.prototype = extend({}, Selection.prototype);
+
+World.prototype.prepare = function() {
+    // using promises here so we can chain stuff
     this.promise = this.page().execute(helpers)
         .then(() => {
             console.log('about to select worlds...', this._id);
@@ -44,7 +49,11 @@ var World = function(url) {
         });
 };
 
-World.prototype = extend({}, Selection.prototype);
+World.prototype.refresh = function() {
+    this._page.refresh();
+    this.prepare();
+    return this;
+};
 
 World.prototype.toString = function(fn) {
     return '[ WorldMorph ]';
