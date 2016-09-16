@@ -22,8 +22,7 @@ describe('selection', function() {
     });
 
     it('should find the world morph', function(done) {
-        client
-            .get(url)
+        world
             .inspect(worlds => {
                 assert.equal(worlds.length, 1);
             })
@@ -31,13 +30,12 @@ describe('selection', function() {
     });
 
     it('should find the world morph (using should)', function(done) {
-        client
-            .get(url)
+        world
             .should.not.be(null)
             .end(done)
     });
 
-    describe.only('selectors', function() {
+    describe('selectors', function() {
         afterEach(function() {
             world.refresh();
         });
@@ -112,10 +110,13 @@ describe('selection', function() {
 
     // Clicking
     describe('interaction', function() {
+        afterEach(function() {
+            world.refresh();
+        });
+
         it('should support clicking on elements', function(done) {
             // Click on the project menu
-            client
-                .get(url)
+            world
                 // Get the controlBar
                 .find('.NetsBloxMorph.PushButtonMorph[action="projectMenu"]')
                     .click()
@@ -127,8 +128,7 @@ describe('selection', function() {
         });
 
         it('should support entering text', function(done) {
-            client
-                .get(url)
+            world
                 // Click the cloud button
                 .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
                     .click()
@@ -161,8 +161,7 @@ describe('selection', function() {
         });
 
         it('should trigger callback w/ error if inspect fails', function(done) {
-            client
-                .get(url)
+            world
                 // Click the cloud button
                 .find('.NetsBloxMorph.PushButtonMorph[action="cloudMenu"]')
                     .should.have.length(1)

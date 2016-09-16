@@ -13,7 +13,7 @@ Attribute.prototype._select = function() {
 
     this.promise = this.promise
         .then(() => {
-            return this.page.execute(utils.attr, this._id, root, this._selector);
+            return this.page().execute(utils.attr, this._id, root, this._selector);
         });
 };
 
