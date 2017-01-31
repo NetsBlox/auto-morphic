@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/NetsBlox/auto-morphic.svg?branch=master)](https://travis-ci.org/NetsBlox/auto-morphic)
 [![Stories in Ready](https://badge.waffle.io/NetsBlox/auto-morphic.png?label=ready&title=Ready)](http://waffle.io/NetsBlox/auto-morphic)
 # auto-morphic
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/NetsBlox/auto-morphic.svg)](https://greenkeeper.io/)
 Auto-morphic is a automated testing utility for [morphic.js](https://github.com/jmoenig/morphic.js).
 
 As morphic does not use html elements (rather, it uses `Morph`s), existing frameworks cannot automate interaction with a morphic project. Auto-morphic provides a way to automate interaction on these types of sites. However, this requires some concepts, such as selectors (eg, '.myClass.otherClass' or '#myId'), being redesigned to fit the morphic context.
